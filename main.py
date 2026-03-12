@@ -211,8 +211,6 @@ def main():
         .base_file_url(f"{LOCAL_API_URL}/file/bot")
         .local_mode(True)
     )
-    if PROXY_URL:
-        builder = builder.proxy(PROXY_URL)
     app = builder.build()
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     app.add_handler(CallbackQueryHandler(handle_callback, pattern=r"^dl:"))
