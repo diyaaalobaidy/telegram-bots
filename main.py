@@ -26,7 +26,7 @@ if PROXY_URL and ("{username}" in PROXY_URL) and ("{password}" in PROXY_URL):
     username = random.choices(string.ascii_letters + string.digits, k=8)
     password = random.choices(string.ascii_letters + string.digits, k=8)
     PROXY_URL = PROXY_URL.format(username=username, password=password)
-
+print(f"Using proxy: {PROXY_URL}" if PROXY_URL else "No proxy configured")
 YDL_BASE_OPTS = {
     "quiet": True,
     "extractor_args": {"youtube": {"js_runtimes": ["nodejs"]}},
