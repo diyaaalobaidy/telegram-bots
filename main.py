@@ -15,8 +15,7 @@ API_ID = os.getenv("API_ID")
 API_HASH = os.getenv("API_HASH")
 LOCAL_API_URL = os.getenv("LOCAL_API_URL", "http://localhost:8081")
 
-_proxy_env = os.getenv("PROXY", "").strip()
-PROXY_URL = "socks5://127.0.0.1:9050" if _proxy_env.lower() == "tor" else (_proxy_env or None)
+PROXY_URL = os.getenv("PROXY_URL", "")
 
 YDL_BASE_OPTS = {
     'quiet': True,
