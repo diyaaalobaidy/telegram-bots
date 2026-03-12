@@ -186,6 +186,7 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 def main():
+    global PROXY_URL
     if not os.path.exists('downloads'):
         os.makedirs('downloads')
 
