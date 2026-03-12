@@ -1,5 +1,8 @@
 FROM python:3.12-slim
 
+# Set DNS servers
+RUN echo "nameserver 8.8.8.8\nnameserver 8.8.4.4" > /etc/resolv.conf
+
 # Install system dependencies: ffmpeg for audio/video processing, nodejs for yt-dlp
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
