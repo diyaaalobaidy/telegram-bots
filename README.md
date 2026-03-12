@@ -13,38 +13,20 @@ A Telegram bot that downloads videos and audio from YouTube (and other yt-dlp su
 
 ## Requirements
 
-- Python 3.10+
-- [ffmpeg](https://ffmpeg.org/) (for audio extraction and video merging)
-- [Docker](https://docs.docker.com/get-docker/) (for the local Telegram Bot API server)
-- Node.js (for yt-dlp YouTube extraction — already used automatically if `node` is on `$PATH`)
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/) *(recommended)*
+- **Or** for manual setup: Python 3.10+, ffmpeg, Node.js
 
-## Setup
+## Quick Start (Docker — recommended)
 
-### 1. Clone and create a virtual environment
+### 1. Clone and configure
 
 ```bash
 git clone <repo-url>
 cd telegram-summarizer
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+cp .env.example .env
 ```
 
-### 2. Install ffmpeg (if not already installed)
-
-```bash
-sudo apt install ffmpeg
-```
-
-### 3. Configure environment variables
-
-Copy the example and fill in your values:
-
-```bash
-cp .env.example .env   # or edit .env directly
-```
-
-`.env` file:
+Edit `.env`:
 
 ```env
 BOT_TOKEN=<your_bot_token_from_BotFather>
@@ -55,20 +37,52 @@ API_HASH=<your_api_hash_from_my.telegram.org>
 - **BOT_TOKEN** — create a bot via [@BotFather](https://t.me/BotFather)
 - **API_ID / API_HASH** — obtain from [my.telegram.org](https://my.telegram.org) → API development tools
 
-### 4. Start the local Telegram Bot API server
+### 2. Build and run
 
-The local server removes the default 50 MB upload limit, allowing files up to 2 GB.
+```bash
+docker compose up -d --build
+```
+
+That's it. Both the local Telegram Bot API server and the bot itself start together.
+
+**Useful commands:**
+
+```bash
+docker compose logs -f bot            # Follow bot logs
+docker compose logs -f telegram-bot-api
+docker compose down                   # Stop everything
+docker compose up -d                  # Start again (no rebuild)
+docker compose up -d --build          # Rebuild after code changes
+```
+
+---
+
+## Manual Setup (without Docker)
+
+### 1. Create a virtual environment
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+### 2. Install system dependencies
+
+```bash
+sudo apt install ffmpeg nodejs
+```
+
+### 3. Configure `.env`
+
+```bash
+cp .env.example .env  # then fill in values
+```
+
+### 4. Start the local Telegram Bot API server
 
 ```bash
 ./start-bot-api.sh
-```
-
-This starts a Docker container (`telegram-bot-api`) on port `8081` with `--restart unless-stopped`, so it survives reboots.
-
-Check it is running:
-
-```bash
-docker logs telegram-bot-api
 ```
 
 ### 5. Run the bot
@@ -90,9 +104,12 @@ docker logs telegram-bot-api
 ```
 telegram-summarizer/
 ├── main.py              # Bot logic
+├── Dockerfile           # Bot container image
+├── docker-compose.yml   # Orchestrates bot + local Bot API server
 ├── requirements.txt     # Python dependencies
-├── start-bot-api.sh     # Script to start the local Telegram Bot API server
+├── start-bot-api.sh     # Manual script to start the local Bot API server
 ├── .env                 # Secret keys (not committed)
+├── .env.example         # Template for .env
 └── downloads/           # Temporary download directory (auto-created)
 ```
 
@@ -106,6 +123,7 @@ telegram-summarizer/
 
 ## Notes
 
-- The `downloads/` folder is used as a staging area; files are deleted after being sent.
-- The local Bot API server must be running before starting the bot, otherwise large file sends will fail.
+- The `downloads/` folder is a staging area; files are deleted after being sent. In Docker it is bind-mounted so it is accessible on the host at `./downloads`.
+- The local Bot API server must be running before the bot starts — `docker compose` handles this ordering automatically via `depends_on`.
 - The bot uses `asyncio.run_in_executor` to offload yt-dlp downloads to a thread, keeping the event loop responsive.
+- `LOCAL_API_URL` defaults to `http://localhost:8081` for manual runs, and is overridden to `http://telegram-bot-api:8081` inside Docker Compose.

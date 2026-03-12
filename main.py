@@ -11,6 +11,7 @@ dotenv.load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 API_ID = os.getenv("API_ID")
 API_HASH = os.getenv("API_HASH")
+LOCAL_API_URL = os.getenv("LOCAL_API_URL", "http://localhost:8081")
 
 YDL_BASE_OPTS = {
     'quiet': True,
@@ -186,8 +187,8 @@ def main():
     app = (
         Application.builder()
         .token(BOT_TOKEN)
-        .base_url("http://localhost:8081/bot")
-        .base_file_url("http://localhost:8081/file/bot")
+        .base_url(f"{LOCAL_API_URL}/bot")
+        .base_file_url(f"{LOCAL_API_URL}/file/bot")
         .local_mode(True)
         .build()
     )
