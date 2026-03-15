@@ -103,14 +103,14 @@ async def process_feeds():
                         title = translator.translate(title)
                     # strip html tags from description and limit to 5000 characters for translation
                     try:
-                        description = re.sub(r'<.*?>', '', entry.description)[5000]
+                        description = re.sub(r'<.*?>', '', entry.description)[:5000]
                     except Exception as e:
+                        print(e)
                         try:
                             description:str = re.sub(r'<.*?>', '', entry.content)[:5000]
                         except Exception as e:
+                            print(e)
                             description = ""
-                    description = description.split(" ")
-                    description = " ".join(description[:-1]) # remove last word to avoid cutting in the middle of a word
                     if TRANSLATE:
                         description = translator.translate(description)
                     # get image if exists
