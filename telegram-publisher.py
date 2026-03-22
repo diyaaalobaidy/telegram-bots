@@ -14,49 +14,24 @@ dotenv.load_dotenv()
 TOKEN = os.getenv('BOT_TOKEN')
 CHANNEL_ID = os.getenv('TELEGRAM_CHANNEL_ID')
 DATABASE_FILE = 'last_seen.json'
-TRANSLATE = False
+TRANSLATE = True
 PERIODIC_CHECK = False
 
 # Dictionary of feeds: { "Name": "URL" }
-FEEDS = {
-    "BBC": "http://feeds.bbci.co.uk/news/world/rss.xml",
-    "NYT": "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
-    "AlJazeera": "https://www.aljazeera.com/xml/rss/all.xml",
-    "The Guardian": "https://www.theguardian.com/world/rss",
-    "Al Arabiya": "https://english.alarabiya.net/feed/rss2/en/News.xml",
-    "Middle East Eye": "https://www.middleeasteye.net/rss",
-    "The New Arab": "https://www.newarab.com/rss",
-    "Mehr News": "https://en.mehrnews.com/rss/tp/579",
+ENGLISH_FEEDS = {
+    "Science Daily": "https://www.sciencedaily.com/rss/all.xml",
+    "Science": "https://www.science.org/action/showFeed?type=etoc&feed=rss&jc=sciadv",
+    "Science - Robotics": "https://www.science.org/action/showFeed?type=etoc&feed=rss&jc=scirobotics",
+    "Knowable Magazine": "https://knowablemagazine.org/rss",
+    "The Guardian - Science": "https://www.theguardian.com/science/rss",
+    "NPR - Science": "https://feeds.npr.org/1007/rss.xml",
 }
 
 ARABIC_FEEDS ={
-    "BBC": "https://www.bbc.com/arabic/index.xml",
-    "AlJazeera": "https://www.aljazeera.net/aljazeerarss/all.xml",
-    "Al Arabiya": "https://www.alarabiya.net/feed/rss2/ar/arab-and-world.xml",
-    "The New Arab": "https://www.alaraby.co.uk/rss",
-    "CNN Arabic": "https://arabic.cnn.com/api/v1/rss/rss.xml",
-    "France 24 Arabic": "https://www.france24.com/ar/%D8%A7%D9%84%D8%B4%D8%B1%D9%82-%D8%A7%D9%84%D8%A3%D9%88%D8%B3%D8%B7/rss",
-    "Sky News Arabia": "https://www.skynewsarabia.com/rss",
-    "RT Arabic": "https://arabic.rt.com/rss/",
-    "Euro News Arabic": "https://arabic.euronews.com/rss",
-    "AlSharq AlAwsat": "https://aawsat.com/feed",
 }
 
 names_ar ={
-    "BBC": "بي بي سي",
-    "NYT": "نيويورك تايمز",
-    "AlJazeera": "الجزيرة",
-    "The Guardian": "الغارديان",
-    "Al Arabiya": "العربية",
-    "Middle East Eye": "عين الشرق الأوسط",
-    "The New Arab": "العربي الجديد",
-    "Mehr News": "مهر نيوز",
-    "CNN Arabic": "سي إن إن بالعربية",
-    "France 24 Arabic": "فرانس 24 بالعربية",
-    "Sky News Arabia": "سكاي نيوز بالعربية",
-    "RT Arabic": "آر تي بالعربية",
-    "Euro News Arabic": "يورونيوز بالعربية",
-    "AlSharq AlAwsat": "الشرق الأوسط",
+
 }
 
 CHECK_INTERVAL = 60 # 1 minute
@@ -80,7 +55,7 @@ def save_last_seen(data):
 async def process_feeds():
     last_seen = load_last_seen()
     to_be_sent = []
-    for name, url in ARABIC_FEEDS.items():
+    for name, url in ENGLISH_FEEDS.items():
         print(f"Checking {name}...")
         feed = feedparser.parse(url)
         
@@ -122,8 +97,8 @@ async def process_feeds():
                     message = ((
                         f"\u200f<b>{title}</b>\n\n"
                         f"{description}\n\n"
-                        f"<a href='{entry.link}'>المصدر: {names_ar[name]}</a>\n"
-                        f"#{name.replace(' ', '_')} #{names_ar[name].replace(' ', '_')}\n"
+                        f"<a href='{entry.link}'>المصدر: {names_ar.get(name, name)}</a>\n"
+                        f"#{name.replace(' ', '_')} #{names_ar.get(name, name).replace(' ', '_')}\n"
                     ), image_url)
                     try:
                         published_time = entry.published_parsed
