@@ -23,8 +23,7 @@ ENGLISH_FEEDS = {
     "Science": "https://www.science.org/action/showFeed?type=etoc&feed=rss&jc=sciadv",
     "Science Robotics": "https://www.science.org/action/showFeed?type=etoc&feed=rss&jc=scirobotics",
     "Knowable Magazine": "https://knowablemagazine.org/rss",
-    "The Guardian Science": "https://www.theguardian.com/science/rss",
-    "NPR Science": "https://feeds.npr.org/1007/rss.xml",
+    "Wired AI": "https://www.wired.com/feed/tag/ai/latest/rss",
 }
 
 ARABIC_FEEDS ={
