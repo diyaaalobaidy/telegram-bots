@@ -86,7 +86,8 @@ async def process_feeds():
                             print(e)
                             description = ""
                     if TRANSLATE:
-                        description = translator.translate(description)
+                        description_ar = translator.translate(description)
+                        description = description_ar + "\n\n\n\n" + description
                     # get image if exists
                     image_url = None
                     if 'media_content' in entry:
