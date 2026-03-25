@@ -1,12 +1,13 @@
 import feedparser
 import subprocess
+import os
 from deep_translator import GoogleTranslator
 
 # --- CONFIGURATION ---
 
 # WordPress Setup
-WP_PATH = "/var/www/html"  # Absolute path to the WordPress installation
-WP_CLI  = "wp"            # Path to wp-cli binary, e.g. /usr/local/bin/wp
+WP_PATH = os.environ["WP_PATH"]  # Absolute path to the WordPress installation
+WP_CLI  = "wp"                   # Path to wp-cli binary, e.g. /usr/local/bin/wp
 
 # Target Feeds (Examples)
 FEEDS = [
