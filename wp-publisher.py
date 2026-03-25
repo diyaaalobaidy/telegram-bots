@@ -18,7 +18,6 @@ WP_CLI  = "wp"                   # Path to wp-cli binary, e.g. /usr/local/bin/wp
 FEEDS = [
     "https://feeds.feedburner.com/TheHackersNews",
     "https://techcrunch.com/feed/",
-    "https://www.theverge.com/rss/index.xml"
 ]
 
 def fetch_full_article(url):
@@ -37,7 +36,7 @@ def fetch_full_article(url):
             or soup.find(attrs={"class": lambda c: c and "article-body" in c})
             or soup.find(attrs={"class": lambda c: c and "post-content" in c})
             or soup.find(attrs={"class": lambda c: c and "entry-content" in c})
-            or soup.body
+            or soup.find(attrs={"class": lambda c: c and "articlebody" in c})
         )
         if not article:
             return "", []
