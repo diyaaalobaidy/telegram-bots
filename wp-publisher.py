@@ -2,6 +2,8 @@ import feedparser
 import subprocess
 import os
 from deep_translator import GoogleTranslator
+import dotenv
+dotenv.load_dotenv()
 
 # --- CONFIGURATION ---
 
