@@ -107,7 +107,7 @@ def post_to_wordpress(title, content, source_url, images=None):
         WP_CLI, "post", "create",
         f"--post_title={title}",
         f"--post_content={full_content}",
-        "--post_status=publish",   # Change to 'publish' to go live immediately
+        "--post_status=draft",   # Change to 'publish' to go live immediately
         "--post_category=1",     # Replace with your tech category ID
         f"--path={WP_PATH}",
         "--allow-root",
